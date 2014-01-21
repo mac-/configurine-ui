@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title><%= title %></title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		{{^debug}}
+		<link rel="stylesheet" href="static/css/<%= title %>.min.css">
+		{{/debug}}
+		{{#debug}}
+		<link rel="stylesheet" href="static/css/<%= title %>.css">
+		{{/debug}}
+
+	</head>
+	<body>
+
+		<div id="application">
+		</div> 
+
+	</body>
+	<script>
+		contextString = '{{{context}}}'
+		window.context = JSON.parse(contextString);
+	</script>
+	{{^debug}}
+	<script data-main="js/main" src="static/js/<%= title %>.min.js"></script>
+	{{/debug}}
+	{{#debug}}
+	<script data-main="js/main" src="static/js/<%= title %>.js"></script>
+	{{/debug}}
+	
+</html>

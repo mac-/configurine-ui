@@ -1,0 +1,31 @@
+<div class="ui form segment authenticate">
+  <div class="field">
+    <label>Client ID</label>
+    <div class="ui left labeled icon input">
+      <input id="clientIdInput" type="text" placeholder="Client ID">
+      <i class="user icon"></i>
+      <div class="ui corner label">
+        <i class="icon asterisk"></i>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Key</label>
+    <div class="ui left labeled icon input">
+      <input  id="clientKey" type="password">
+      <i class="lock icon"></i>
+      <div class="ui corner label">
+        <i class="icon asterisk"></i>
+      </div>
+    </div>
+  </div>
+  <div class="ui error message">
+    <div class="header">We noticed some issues</div>
+  </div>
+  <div proxy-click="authenticate" class="ui purple submit button">
+    Authenticate
+    {{#isAuthenticating}}
+    <i class="loading icon"></i>
+    {{/isAuthenticating}}
+  </div>
+</div>

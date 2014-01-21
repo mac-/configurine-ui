@@ -1,0 +1,7 @@
+*~
+*.log
+node_modules
+.DS*
+test/coverage*
+dist/*
+opter.json

@@ -1,0 +1,19 @@
+<div class="ui inverted purple header item">Configurine</div>
+<a proxy-click="changeView" data-item="search" class="item">
+	<i class="search icon"></i>Search
+</a>
+<a proxy-click="changeView" data-item="add" class="item">
+	<i class="add icon"></i>Add New
+</a>
+<div class="right menu">
+	{{^isAuthenticated}}
+	<a proxy-click="changeView" data-item="authenticate" class="item">
+		<i class="sign in icon"></i>Authenticate
+	</a>
+	{{/isAuthenticated}}
+	{{#isAuthenticated}}
+	<a proxy-click="changeView" data-item="signout" class="item">
+		<i class="sign out icon"></i>Log Out
+	</a>
+	{{/isAuthenticated}}
+</div>

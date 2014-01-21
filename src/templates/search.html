@@ -1,0 +1,82 @@
+<div class="search">
+	<div class="ui form segment">
+		<div class="four fields">
+			<div class="field">
+				<label>Name</label>
+				<input placeholder="Name" type="text" value={{name}}>
+			</div>
+			<div class="field">
+				<label>Application Name</label>
+				<input placeholder="Application Name" type="text" value={{appName}}>
+			</div>
+			<div class="field">
+				<label>Application Version</label>
+				<input placeholder="Application Version" type="text" value={{appVersion}}>
+			</div>
+			<div class="field">
+				<label>Environment Name</label>
+				<input placeholder="Environment Name" type="text" value={{envName}}>
+			</div>
+		</div>
+	</div>
+
+	<!--
+	<div class="ui active inverted dimmer">
+		<div class="ui text loader">Loading</div>
+	</div>
+	-->
+
+	<table class="ui table segment">
+		<thead>
+			<tr>
+				<th>Value</th>
+				<th>Application Associations</th>
+				<th>Environment Associations</th>
+				<th>Active</th>
+				<th>Sensitive</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#config:i}}
+			<tr>
+				<td>{{ formatValue(value) }}</td>
+				<td>{{ formatAppAssociations(associations) }}</td>
+				<td>{{ formatEnvAssociations(associations) }}</td>
+				<td>
+					{{#isActive}}
+					<span class="green">✓</span>
+					{{/isActive}}
+					{{^isActive}}
+					<span class="red">×</span>
+					{{/isActive}}
+				</td>
+				<td>
+					{{#isSensitive}}
+					<span class="green">✓</span>
+					{{/isSensitive}}
+					{{^isSensitive}}
+					<span class="red">×</span>
+					{{/isSensitive}}
+				</td>
+				<td>
+					<a proxy-click="edit" class="optionsPopup" title="edit">
+						<i class="edit icon"></i>
+					</a>
+					<a proxy-click="remove" class="optionsPopup" title="remove">
+						<i class="remove icon"></i>
+					</a>
+				</td>
+			</tr>
+			{{/config}}
+		</tbody>
+		<tfoot>
+			<tr>
+				<th colspan="6">
+					{{ count(config) }} entries found
+				</th>
+			</tr>
+		</tfoot>
+	</table>
+
+</div>
