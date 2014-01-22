@@ -39,8 +39,8 @@
 		</thead>
 		<tbody>
 			{{#config:i}}
-			<tr>
-				<td>{{ formatValue(value) }}</td>
+			<tr class='{{rowClass}}'>
+				<td>{{ formatValue(value) }} {{picked}}</td>
 				<td>{{ formatAppAssociations(associations) }}</td>
 				<td>{{ formatEnvAssociations(associations) }}</td>
 				<td>

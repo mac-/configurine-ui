@@ -1,6 +1,7 @@
-var ConfigService = require('../services/Config');
+var ConfigService = require('../services/Config'),
+	picker = require('configurine-picker');
 
-var SearchModel = function(options) {
+var FindModel = function(options) {
 	options = options || {};
 	
 	var self = this,
@@ -19,7 +20,7 @@ var SearchModel = function(options) {
 	};
 
 	this.fetchConfig = function() {
-		configService.get(self.name, self.appName, self.appVersion, self.envName, function(err, data) {
+		configService.get(self.name, '', '', '', function(err, data) {
 			if (err || !data  || data.length < 1) {
 				if (self.config.length > 0) {
 					self.config = [];
@@ -27,7 +28,37 @@ var SearchModel = function(options) {
 				return;
 			}
 			self.config = data;
+			self.pick();
 		});
+	};
+
+	this.pick = function() {
+		var i;
+		if (self.appName && self.appVersion && self.envName) {
+			var configObj = picker({
+				names: [self.name],
+				appName: self.appName,
+				appVersion: self.appVersion,
+				environmentName: self.envName,
+				associationPriority: 'app',
+				entries: self.config,
+				pickField: 'id'
+			});
+			var pickedEntryId = configObj[self.name];
+			for (i = 0; i < self.config.length; i++) {
+				if (self.config[i].id === pickedEntryId) {
+					self.config[i].rowClass = 'positive';
+				}
+				else {
+					self.config[i].rowClass = '';
+				}
+			}
+		}
+		else {
+			for (i = 0; i < self.config.length; i++) {
+				self.config[i].rowClass = '';
+			}
+		}
 	};
 
 	this.formatValue = function(value) {
@@ -53,4 +84,4 @@ var SearchModel = function(options) {
 	};
 };
 
-module.exports = SearchModel;
+module.exports = FindModel;
