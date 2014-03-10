@@ -28,7 +28,10 @@ var FindModel = function(options) {
 				return;
 			}
 			self.config = data;
-			self.pick();
+			setTimeout(function() {
+				self.pick();
+			}, 100);
+			
 		});
 	};
 
@@ -58,6 +61,13 @@ var FindModel = function(options) {
 			for (i = 0; i < self.config.length; i++) {
 				self.config[i].rowClass = '';
 			}
+		}
+	};
+
+	this.resetPick = function() {
+		var i;
+		for (i = 0; i < self.config.length; i++) {
+			self.config[i].rowClass = '';
 		}
 	};
 

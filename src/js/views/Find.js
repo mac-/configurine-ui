@@ -16,6 +16,15 @@ function FindView() {
 	BaseView.call(this, options);
 
 	this.on('create', function() {
+		$('.ui.accordion').accordion({
+			onOpen: function() {
+				findModel.pick();
+			},
+			onClose: function() {
+				findModel.resetPick();
+			}
+		});
+
 		this._ractive.observe({
 			name: findModel.fetchConfig,
 			appName: findModel.pick,

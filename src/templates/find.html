@@ -1,23 +1,28 @@
 <div class="search">
-	<div class="ui form segment">
-		<div class="four fields">
+	<div class="ui basic fluid accordion form segment">
 			<div class="field">
-				<label>Name</label>
+				<label>Find By Name</label>
 				<input placeholder="Name" type="text" value={{name}}>
 			</div>
-			<div class="field">
-				<label>Application Name</label>
-				<input placeholder="Application Name" type="text" value={{appName}}>
+			<div class="title">
+				<i class="icon dropdown"></i> Configurine Agent Options
 			</div>
-			<div class="field">
-				<label>Application Version</label>
-				<input placeholder="Application Version" type="text" value={{appVersion}}>
+			<div class="content">
+				<div class="three fields">
+					<div class="field">
+						<label>Application Name</label>
+						<input placeholder="Application Name" type="text" value={{appName}}>
+					</div>
+					<div class="field">
+						<label>Application Version</label>
+						<input placeholder="Application Version" type="text" value={{appVersion}}>
+					</div>
+					<div class="field">
+						<label>Environment Name</label>
+						<input placeholder="Environment Name" type="text" value={{envName}}>
+					</div>
+				</div>
 			</div>
-			<div class="field">
-				<label>Environment Name</label>
-				<input placeholder="Environment Name" type="text" value={{envName}}>
-			</div>
-		</div>
 	</div>
 
 	<!--
