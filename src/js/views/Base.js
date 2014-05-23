@@ -1,6 +1,5 @@
 var Ractive = require('Ractive'),
 	util = require('util'),
-	//BaseModel = require('../models/Base'),
 	EventEmitter = require('events').EventEmitter;
 
 function BaseView(ractiveOptions) {
@@ -10,19 +9,24 @@ function BaseView(ractiveOptions) {
 		throw new Error('Missing or invalid options');
 	}
 	var self = this,
+		/*update = function(newValue, oldValue, keyPath) {
+			self._ractive.update(keyPath);
+		},*/
 		element, displayMode;
 
 	this._ractive = null;
 
 	this.isHidden = false;
 
-	/*if (ractiveOptions.data instanceof BaseModel) {
-		ractiveOptions.data.on('property-change', function(propName, oldVal, newVal) {
+	if (ractiveOptions.data instanceof EventEmitter) {
+		ractiveOptions.data.on('property-change', function(propName, newVal) {
 			if (self._ractive && self._ractive.get(propName) !== newVal) {
 				self._ractive.set(propName, newVal);
 			}
 		});
-	}*/
+	}
+
+	
 
 	this.create = function() {
 		if (!self._ractive) {
@@ -50,11 +54,11 @@ function BaseView(ractiveOptions) {
 		}
 	};
 
-	this.show = function() {
+	this.show = function(context) {
 		if (self._ractive && self.isHidden) {
 			element.style.display = displayMode;
 			self.isHidden = false;
-			self.emit('show');
+			self.emit('show', context);
 		}
 	};
 

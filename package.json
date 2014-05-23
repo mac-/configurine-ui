@@ -11,8 +11,7 @@
 		"statsd-client": "0.x.x",
 		"hapi-statsd": "0.x.x",
 		"opter": "0.x.x",
-		"joi": "0.x.x",
-		"hapi": "1.x.x",
+		"hapi": "3.x.x",
 		"ratify": "0.x.x",
 		"handlebars": "1.x.x",
 		"configurine-picker": "0.x.x"
@@ -21,8 +20,8 @@
 		"mocha": "1.x.x",
 		"nock": "0.x.x",
 		"jshint": "2.x.x",
-		"blanket": "1.0.x",
-		"travis-cov": "0.2.x",
+		"blanket": "1.x.x",
+		"travis-cov": "0.x.x",
 		"sinon": "1.x.x",
 		"ractive": "0.x.x",
 		"grunt-cli": "0.x.x",
@@ -50,6 +49,9 @@
 	},
 	"scripts": {
 		"test": "make test && make test-cov",
+		"start": "app.js"
+	},
+	"config": {
 		"blanket": {
 			"pattern": "//^((?!/node_modules/)(?!/test/).)*$/gi",
 			"onlyCwd": true,
@@ -59,7 +61,6 @@
 		},
 		"travis-cov": {
 			"threshold": 100
-		},
-		"start": "app.js"
+		}
 	}
 }

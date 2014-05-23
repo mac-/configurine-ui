@@ -1,8 +1,12 @@
 <div class="ui form segment">
-	<h1 class="ui header"><i class="add icon"></i>Add An Entry</h1>
+	<h1 class="ui header"><i class="add icon"></i>Add/Update An Entry</h1>
+	<div class="field">
+		<label>ID of the entry to update:</label>
+		<input placeholder="Entry ID" type="text" value={{entryId}}>
+	</div>
 	<div class="field">
 		<label>JSON:</label>
 		<div class="textarea" id="codeMirror"></div>
 	</div>
-	<div proxy-click="submit" class="ui purple submit button">Create</div>
+	<div proxy-click="submit" class="ui purple submit button">{{^entryId}}Create{{/entryId}}{{#entryId}}Update{{/entryId}}</div>
 </div>

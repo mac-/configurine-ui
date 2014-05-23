@@ -10,8 +10,9 @@ function MainView(router) {
 			el: document.getElementById('application'),
 			template: templates['main'],
 			partials: {
-				headerBar: templates['headerBar'],
-				mainContent: templates['mainContent']
+				headerBar: templates['partials.headerBar'],
+				mainContent: templates['partials.mainContent'],
+				noAuthModal: templates['partials.unauthenticatedModal']
 			},
 			data: {
 				isAuthenticated: sessionHelper.isAuthenticated()

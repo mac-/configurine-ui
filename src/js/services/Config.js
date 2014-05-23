@@ -6,6 +6,10 @@ var Config = function(options) {
 
 	//var self = this;
 
+	this.canWrite = function() {
+		return sessionHelper.isAuthenticated();
+	};
+
 	this.getById = function(id, callback) {
 		if (!id) {
 			return;
@@ -87,6 +91,66 @@ var Config = function(options) {
 				dataType: 'json',
 				processData: false,
 				data: JSON.stringify(entry),
+				headers: {
+					'Authorization': token
+				},
+				contentType: 'application/json; charset=UTF-8',
+				crossDomain: true
+			});
+		});
+	};
+
+
+	this.update = function(id, entry, callback) {
+		if (!entry) {
+			return;
+		}
+		sessionHelper.getToken(function(err, token) {
+			jQuery.ajax({
+				type: 'PUT',
+				url: options.baseUrl + '/config/' + id,
+				success: function(data, status, jqXHR) {
+					if (callback) {
+						callback(null, jqXHR.getResponseHeader('location'));
+					}
+				},
+				error: function(jqXHR, status, error) {
+					if (callback) {
+						callback(error);
+					}
+				},
+				dataType: 'json',
+				processData: false,
+				data: JSON.stringify(entry),
+				headers: {
+					'Authorization': token
+				},
+				contentType: 'application/json; charset=UTF-8',
+				crossDomain: true
+			});
+		});
+	};
+
+	this.remove = function(id, callback) {
+		if (!id) {
+			return;
+		}
+		sessionHelper.getToken(function(err, token) {
+			jQuery.ajax({
+				type: 'DELETE',
+				url: options.baseUrl + '/config/' + id,
+				success: function(data, status, jqXHR) {
+					if (callback) {
+						callback(null, jqXHR.getResponseHeader('location'));
+					}
+				},
+				error: function(jqXHR, status, error) {
+					if (callback) {
+						callback(error);
+					}
+				},
+				dataType: 'json',
+				processData: false,
 				headers: {
 					'Authorization': token
 				},

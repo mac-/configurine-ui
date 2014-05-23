@@ -1,7 +1,6 @@
 var http = require('http'),
 	https = require('https'),
 	Hapi = require('hapi'),
-	Joi = require('joi'),
 	_ = require('underscore'),
 	//AuthenticationHelper = require('./lib/helpers/authentication.js'),
 	StatsdClient = require('statsd-client'),
@@ -63,7 +62,7 @@ var initRoutes = function(server) {
 				isCaseSensitive: false
 			},
 			files: {
-				relativeTo: 'cwd'
+				relativeTo: './'
 			},
 			views: {
 				engines: { html: 'handlebars' },

@@ -3,14 +3,14 @@ var templates = require('../../templates'),
 	BaseView = require('./Base'),
 	FindModel = require('../models/Find');
 
-function FindView() {
+function FindView(router) {
 
 	var findModel = new FindModel(),
+		self = this,
 		options = {
 			el: document.getElementById('find'),
 			template: templates['find'],
-			data: findModel,
-			magic: true
+			data: findModel
 		};
 
 	BaseView.call(this, options);
@@ -24,6 +24,8 @@ function FindView() {
 				findModel.resetPick();
 			}
 		});
+		
+		var modalElement = $('#notAuthedModal');
 
 		this._ractive.observe({
 			name: findModel.fetchConfig,
@@ -34,7 +36,26 @@ function FindView() {
 				$('.optionsPopup').popup();
 			}
 		}, { defer: true });
+
+		self._ractive.on('edit', function(event) {
+			if (findModel.canWrite()) {
+				router.go('/add', { data: event.context });
+			}
+			else {
+				modalElement.modal('show');
+			}
+			
+		});
 		
+		self._ractive.on('remove', function(event) {
+			if (findModel.canWrite()) {
+				findModel.remove(event.context.id);
+			}
+			else {
+				modalElement.modal('show');
+			}
+		});
+
 	});
 
 }

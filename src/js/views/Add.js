@@ -3,7 +3,7 @@ var templates = require('../../templates'),
 	BaseView = require('./Base'),
 	ConfigSvc = require('../services/Config');
 
-function AddView() {
+function AddView(router, context) {
 
 	var self = this,
 		codeMirror = null,
@@ -12,16 +12,33 @@ function AddView() {
 		}),
 		options = {
 			el: document.getElementById('add'),
-			template: templates['add']
+			template: templates['add'],
+			model: {
+				entryId: context.entryId
+			}
 		};
 
 	BaseView.call(this, options);
 
 	this.on('create', function() {
 
+		var modalElement = $('#notAuthedModal');
+		
 		self._ractive.on('submit', function() {
+			
+			if (!configSvc.canWrite()) {
+				return modalElement.modal('show');
+			}
+			
+			
+			var entryId = self._ractive.get('entryId');
 			var entry = JSON.parse(codeMirror.getValue());
-			configSvc.create(entry);
+			if (entryId) {
+				configSvc.update(entryId, entry);
+			}
+			else {
+				configSvc.create(entry);
+			}
 		});
 
 		codeMirror = CodeMirror(document.getElementById('codeMirror'), {
@@ -30,6 +47,18 @@ function AddView() {
 			indentWithTabs: true,
 			smartIndent: false
 		});
+	});
+	
+	this.on('show', function(context) {
+		self._ractive.set({
+			entryId: context.data.id
+		});
+		var clone = JSON.parse(JSON.stringify(context.data));
+		delete clone.id;
+		delete clone.created;
+		delete clone.modified;
+		delete clone.rowClass;
+		codeMirror.setValue(JSON.stringify(clone, true, '\t'));
 	});
 
 

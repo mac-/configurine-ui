@@ -1,9 +1,10 @@
-var Ractive = require('ractive');
+var Ractive = require('ractive'),
+	path = require('path'),
+	pkg = require('./package.json');
 
 module.exports = function(grunt) {
 
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
 		clean: {
 			all: {
 				src: 'dist/**/*'
@@ -24,7 +25,7 @@ module.exports = function(grunt) {
 		browserify: {
 			task: {
 				src: ['src/js/**/*.js', '!src/js/libs/**/*.js'],
-				dest: 'dist/js/<%= pkg.name %>-browserify.js',
+				dest: 'dist/js/' + pkg.name + '-browserify.js',
 				options: {
 					shim: {
 						Ractive: {
@@ -38,24 +39,22 @@ module.exports = function(grunt) {
 		uglify: {
 			options: {
 				// the banner is inserted at the top of the output
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %> */\n'
+				banner: '/*! ' + pkg.name + ' <%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %> */\n'
 			},
 			task: {
-				files: {
-					'dist/js/<%= pkg.name %>.min.js': ['<%= concat.js.dest %>']
-				}
+				dest: 'dist/js/' + pkg.name + '.min.js',
+				src: ['<%= concat.js.dest %>']
 			}
 		},
 		cssmin: {
 			options: {
 				// the banner is inserted at the top of the output
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n',
+				banner: '/*! ' + pkg.name + ' <%= grunt.template.today("dd-mm-yyyy") %> */\n',
 				report: 'min'
 			},
 			task: {
-				files: {
-					'dist/css/<%= pkg.name %>.min.css': ['<%= absurd.task.dest %>', 'src/css/libs/*.css']
-				}
+				dest: 'dist/css/' + pkg.name + '.min.css',
+				src: ['<%= absurd.task.dest %>', 'src/css/libs/*.css']
 			}
 		},
 		jshint: {
@@ -69,7 +68,7 @@ module.exports = function(grunt) {
 		absurd: {
 			task: {
 				src: __dirname + '/src/css/index.js',
-				dest: 'dist/css/<%= pkg.name %>.css'
+				dest: 'dist/css/' + pkg.name + '.css'
 			}
 		},
 		watch: {
@@ -103,17 +102,17 @@ module.exports = function(grunt) {
 		concat: {
 			css: {
 				src: ['<%= absurd.task.dest %>', 'src/css/libs/*.css'],
-				dest: 'dist/css/<%= pkg.name %>.css'
+				dest: 'dist/css/' + pkg.name + '.css'
 			},
 			js: {
 				src: ['src/js/libs/global/*.js', '<%= browserify.task.dest %>'],
-				dest: 'dist/js/<%= pkg.name %>.js'
+				dest: 'dist/js/' + pkg.name + '.js'
 			}
 		},
 		ejs: {
 			index: {
 				options: {
-					title: '<%= pkg.name %>',
+					title: pkg.name,
 					min: true
 				},
 				src: 'src/index.html',
@@ -124,23 +123,17 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-ejs');
-	grunt.loadNpmTasks('grunt-absurd');
-	grunt.loadNpmTasks('grunt-browserify');
+	// load all grunt tasks from package.json
+	Object.keys(pkg.devDependencies).filter(function(dep) { return (dep.indexOf('grunt-') === 0 && dep !== 'grunt-cli'); }).forEach(grunt.loadNpmTasks);
 
 	grunt.registerTask('compile-templates', function() {
 		var compiledTemplates = {};
 		var templateFileContent = '/* This file was auto-generated at ' + grunt.template.today('dddd, mmmm dS, yyyy, h:MM:ss TT') + '*/\n';
 		grunt.file.recurse('src/templates', function(absPath, rootDir, subDir, fileName) {
-			var name = fileName.substring(0, fileName.lastIndexOf('.'));
-			var ext = fileName.substring(fileName.lastIndexOf('.')+1);
+			var slashRegex = new RegExp(path.sep, 'g'),
+				ns = (subDir) ? subDir.replace(slashRegex, '.') + '.' : '',
+				name = ns + fileName.substring(0, fileName.lastIndexOf('.')),
+				ext = fileName.substring(fileName.lastIndexOf('.')+1);
 			if (ext === 'html') {
 				var template = grunt.file.read(absPath, { encoding: 'utf8' });
 				compiledTemplates[name] = Ractive.parse(template);

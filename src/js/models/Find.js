@@ -1,13 +1,21 @@
 var ConfigService = require('../services/Config'),
-	picker = require('configurine-picker');
+	_ = require('underscore'),
+	picker = require('configurine-picker'),
+	util = require('util'),
+	EventEmitter = require('events').EventEmitter;
 
-var FindModel = function(options) {
+function FindModel(options) {
 	options = options || {};
 	
 	var self = this,
 		configService = new ConfigService({
 			baseUrl: window.context.config.configurine.baseUrl
-		});
+		}),
+		packLater = function() {
+			setTimeout(function() {
+				self.pick();
+			}, 100);
+		};
 
 	this.name = '';
 	this.appName = '';
@@ -15,6 +23,10 @@ var FindModel = function(options) {
 	this.envName = '';
 	this.config = [];
 
+	this.canWrite = function() {
+		return configService.canWrite();
+	};
+	
 	this.count = function(arr) {
 		return arr.length;
 	};
@@ -22,15 +34,28 @@ var FindModel = function(options) {
 	this.fetchConfig = function() {
 		configService.get(self.name, '', '', '', function(err, data) {
 			if (err || !data  || data.length < 1) {
-				if (self.config.length > 0) {
-					self.config = [];
-				}
+				self.config = [];
+			}
+			else {
+				self.config = data;
+				packLater();
+			}
+			self.emit('property-change', 'config', data);
+		});
+	};
+
+	this.remove = function(id) {
+		configService.remove(id, function(err) {
+			if (err) {
 				return;
 			}
-			self.config = data;
-			setTimeout(function() {
-				self.pick();
-			}, 100);
+			self.config = _.filter(self.config, function(item) {
+				return item.id !== id;
+			});
+
+			packLater();
+			
+			self.emit('property-change', 'config', self.config);
 			
 		});
 	};
@@ -92,6 +117,8 @@ var FindModel = function(options) {
 	this.formatEnvAssociations = function(associations) {
 		return associations.environments.toString();
 	};
-};
+}
+
+util.inherits(FindModel, EventEmitter);
 
 module.exports = FindModel;
