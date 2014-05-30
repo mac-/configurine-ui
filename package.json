@@ -11,7 +11,7 @@
 		"statsd-client": "0.x.x",
 		"hapi-statsd": "0.x.x",
 		"opter": "0.x.x",
-		"hapi": "3.x.x",
+		"hapi": "4.x.x",
 		"ratify": "0.x.x",
 		"handlebars": "1.x.x",
 		"configurine-picker": "0.x.x"
