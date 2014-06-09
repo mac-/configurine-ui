@@ -5,3 +5,4 @@ node_modules
 test/coverage*
 dist/*
 opter.json
+src/templates/index.js

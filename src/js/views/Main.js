@@ -12,7 +12,8 @@ function MainView(router) {
 			partials: {
 				headerBar: templates['partials.headerBar'],
 				mainContent: templates['partials.mainContent'],
-				noAuthModal: templates['partials.unauthenticatedModal']
+				noAuthModal: templates['partials.unauthenticatedModal'],
+				areYouSureModal: templates['partials.areYouSureModal']
 			},
 			data: {
 				isAuthenticated: sessionHelper.isAuthenticated()

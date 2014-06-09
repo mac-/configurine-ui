@@ -18,14 +18,17 @@ function FindView(router) {
 	this.on('create', function() {
 		$('.ui.accordion').accordion({
 			onOpen: function() {
+				console.log('here');
 				findModel.pick();
 			},
 			onClose: function() {
+				console.log('here2');
 				findModel.resetPick();
 			}
 		});
 		
-		var modalElement = $('#notAuthedModal');
+		var modalElement = $('#notAuthedModal'),
+			confirmModalElement = $('#areYouSureModal');
 
 		this._ractive.observe({
 			name: findModel.fetchConfig,
@@ -49,7 +52,9 @@ function FindView(router) {
 		
 		self._ractive.on('remove', function(event) {
 			if (findModel.canWrite()) {
-				findModel.remove(event.context.id);
+				confirmModalElement.modal('setting', 'onApprove', function() {
+					findModel.remove(event.context.id);
+				}).modal('show');
 			}
 			else {
 				modalElement.modal('show');
